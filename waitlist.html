@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BuildEmpire Waitlist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #09090b;
+      --surface: #111118;
+      --border: #1e1e2e;
+      --border-hover: #00674f;
+      --emerald: #00674f;
+      --bright: #00c878;
+      --orange: #ff6b00;
+      --text: #fafafa;
+      --muted: #a1a1aa;
+      --glow: 0 0 24px rgba(0, 200, 120, 0.25);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .section { padding: 64px 0; }
+    .section-label {
+      color: var(--bright);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .section-headline { font-size: 32px; margin: 0 0 12px; font-weight: 600; }
+    .section-subline { font-size: 16px; color: var(--muted); margin: 0 0 28px; }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 24px;
+      padding-bottom: 32px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: auto;
+    }
+    .logo-mark {
+      width: 16px; height: 16px; background: var(--bright); box-shadow: 0 0 12px rgba(0,200,120,0.4);
+      border-radius: 2px;
+    }
+    .hero-content { text-align: center; margin: auto 0; }
+    .hero-headline { font-size: 52px; line-height: 1.1; margin: 0 0 24px; font-weight: 700; }
+    .hero-headline .accent { color: var(--bright); }
+    .hero-subline { max-width: 760px; margin: 0 auto 32px; color: var(--muted); font-size: 18px; }
+    .cta {
+      background: var(--emerald);
+      color: var(--text);
+      border: none;
+      border-radius: 12px;
+      padding: 16px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: var(--glow);
+    }
+    .cta:hover { background: var(--bright); box-shadow: 0 0 28px rgba(0, 200, 120, 0.35); }
+    .hero-cta { min-width: 300px; }
+    .hero-urgency { margin-top: 14px; font-size: 12px; color: var(--muted); }
+
+    .diagnostic-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .diag-card {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .diag-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--orange);
+    }
+    .diag-card:hover { background: rgba(255, 107, 0, 0.06); border-color: var(--orange); }
+    .diag-card.selected { background: rgba(255, 107, 0, 0.1); border-color: var(--orange); }
+    .diag-card.selected::before { box-shadow: 2px 0 12px rgba(255, 107, 0, 0.4); }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 16px;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      transition: 0.3s;
+    }
+    .feature-row:hover { background: rgba(0, 103, 79, 0.04); }
+    .feature-icon {
+      width: 42px; height: 42px; border-radius: 50%; background: var(--emerald); display: grid; place-items: center; font-size: 28px;
+      margin-top: 4px;
+    }
+    .feature-row p { margin: 0; color: var(--muted); }
+
+    .bonus-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--bright);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 14px;
+    }
+    .bonus-card p { margin: 8px 0 0; color: var(--muted); }
+
+    #waitlist-form-section { display: none; }
+    .tribe-signal {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      margin-bottom: 24px;
+    }
+    .form-wrap { max-width: 480px; margin: 0 auto; }
+    .form-headline { font-size: 20px; font-weight: 600; margin: 0 0 16px; text-align: center; }
+    .field { margin-bottom: 14px; }
+    label { display: block; margin-bottom: 6px; font-size: 14px; }
+    input {
+      width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 14px 16px; color: var(--text); font-size: 15px; transition: border-color 0.2s;
+    }
+    input::placeholder { color: var(--muted); }
+    input:focus { border-color: var(--emerald); outline: none; }
+    .helper { margin-top: 6px; font-size: 11px; color: var(--muted); }
+    .error { margin-top: 6px; font-size: 12px; color: var(--muted); display: none; }
+    .error-visible { display: block; }
+    .input-error { border-color: var(--bright) !important; }
+    .form-urgency { margin-top: 12px; font-size: 12px; color: var(--muted); text-align: center; }
+
+    .success-state { display: none; max-width: 620px; margin: 0 auto; text-align: center; }
+    .checkmark { font-size: 64px; color: var(--bright); text-shadow: 0 0 20px rgba(0, 200, 120, 0.35); margin-bottom: 8px; }
+    .success-headline { font-size: 24px; margin: 0 0 8px; }
+    .success-subline { color: var(--muted); margin: 0 0 20px; }
+    .divider { border-top: 1px solid var(--border); margin: 16px 0; }
+    .italic { color: var(--muted); font-style: italic; font-size: 14px; margin: 0 0 12px; }
+    .quote { border-left: 3px solid var(--bright); padding-left: 16px; font-size: 16px; font-weight: 500; text-align: left; }
+    .small-muted { color: var(--muted); font-size: 13px; text-align: left; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 26px 0 30px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; }
+    .footer-left { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+    .footer-center { text-align: center; color: var(--muted); font-style: italic; font-size: 14px; }
+
+    @media (max-width: 767px) {
+      .section-headline { font-size: 24px; }
+      .hero-headline { font-size: 34px; }
+      .hero-subline { font-size: 16px; }
+      .hero-cta, .form-wrap .cta { width: 100%; min-width: auto; }
+      .diagnostic-grid { grid-template-columns: 1fr; }
+      .feature-row { grid-template-columns: 1fr; text-align: left; }
+      .feature-icon { margin: 0 0 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero section">
+      <div class="logo"><span class="logo-mark"></span>BuildEmpire</div>
+      <div class="hero-content">
+        <h1 class="hero-headline">You don't lack ambition.<br />You lack the <span class="accent">unfair advantage</span>.</h1>
+        <p class="hero-subline">While you scroll, the top 1% are building.<br />BuildEmpire is the AI execution engine designed to kill cheap dopamine,<br />force you into flow state, and grow a visual empire — one locked session at a time.<br />The architecture is ready. The gates open soon.</p>
+        <button class="cta hero-cta" id="heroCta">Claim Your Founding Member Spot →</button>
+        <p class="hero-urgency">₹99/month at launch. Founding Members lock this price forever. No credit card now.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">Diagnose Your Failure Mode</p>
+      <h2 class="section-headline" style="font-size:28px;">What is killing your execution right now?</h2>
+      <p class="section-subline" style="font-size:14px;">Be honest. No one is watching. Pick one.</p>
+      <div class="diagnostic-grid">
+        <button class="diag-card reveal-item" data-mode="Paralyzed by cheap dopamine. I open Instagram instead of starting.">⚡ Paralyzed by cheap dopamine.<br />I open Instagram instead of starting.</button>
+        <button class="diag-card reveal-item" data-mode="No 10-year blueprint. I work hard but have no idea where I'm going.">🧭 No 10-year blueprint.<br />I work hard but have no idea where I'm going.</button>
+        <button class="diag-card reveal-item" data-mode="Zero daily accountability. I plan everything. I execute nothing.">🔴 Zero daily accountability.<br />I plan everything. I execute nothing.</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">The Execution Engine</p>
+      <h2 class="section-headline">BuildEmpire is not an app. It is an execution system.</h2>
+      <p class="section-subline">One session. One brick. One empire.<br />Your 10-year vision — converted into today's 5 tasks<br />and a visual empire that grows every time you lock in.</p>
+      <div class="feature-row reveal-item"><div class="feature-icon">🧠</div><div><strong>180-IQ AI Strategist — not a cheerleader</strong><p>Built on AWS Bedrock. It doesn't say "great idea." It holds a mirror to your reality, forces you through the GROW framework, and refuses to proceed until you commit to hard numbers and a vivid 10-year vision.</p></div></div>
+      <div class="feature-row reveal-item"><div class="feature-icon">🏰</div><div><strong>Your empire grows one brick at a time</strong><p>1 completed focus session = 1 brick. Non-negotiable. Irreversible. The castle on your screen is the only honest scorecard of your execution. Tasks give direction. The timer builds the empire.</p></div></div>
+      <div class="feature-row reveal-item"><div class="feature-icon">⚔️</div><div><strong>Empire Wars — the multiplayer accountability layer</strong><p>You are assigned to a House: Agni (Builders), Vajra (Creators), Artha (Earners), or Dharma (Learners). Your sessions fuel your House's global war. If you don't lock in — your House loses rank. Tribal stakes beat personal guilt every time.</p></div></div>
+      <div class="feature-row reveal-item"><div class="feature-icon">🌑</div><div><strong>The Shadow — your future self is already ahead</strong><p>A parallel empire grows at the pace you committed to. Once a week, your future self sends you a message built from the exact words of your 10-year vision. Pull, not push. Never guilt. Always an invitation to catch up.</p></div></div>
+    </section>
+
+    <section class="section">
+      <p class="section-label">Founding Member Bundle</p>
+      <h2 class="section-headline">Join the waitlist. Get all three. Before anyone else.</h2>
+      <p class="section-subline" style="font-size:14px;">These are not marketing incentives. They are structural advantages that compound over time.</p>
+      <div class="bonus-card reveal-item"><strong>🩸 Founding Bloodline Status</strong><p>First pick of your House. A permanent "Founding Member" badge beside your name on the global Empire Wars leaderboard. When the public arrives — you already outrank them. This is not cosmetic. This is legacy.</p></div>
+      <div class="bonus-card reveal-item"><strong>🔒 Grandfathered Pricing — Locked Forever</strong><p>BuildEmpire launches at ₹99/month. That price exists because we trust you first. Founding Members lock this rate permanently. When we raise prices — and we will — your cost never changes. Not next year. Not ever.</p></div>
+      <div class="bonus-card reveal-item"><strong>📋 Pre-Flight Blueprint — Delivered Immediately</strong><p>You can't access the app yet. So we give you the manual system now. The 5-phase GROW framework + the NASA 26-minute power nap protocol. Use it tomorrow. Feel the result before the app ships.</p></div>
+    </section>
+
+    <section id="waitlist-form-section" class="section">
+      <p class="tribe-signal"><strong>Join the Phalanx.</strong><br />A private collective of builders, engineers, and founders engineering their own reality.<br />No tourists. No spectators. No weak commitments.</p>
+      <div class="form-wrap" id="formContainer">
+        <h3 class="form-headline">Claim your spot. The founding tier closes at launch.</h3>
+        <form id="waitlistForm" novalidate>
+          <div class="field"><label for="name">First Name</label><input id="name" type="text" placeholder="What do we call you?" required /><div class="error" id="nameError">We need something to call you.</div></div>
+          <div class="field"><label for="email">Email Address</label><input id="email" type="email" placeholder="Your best email — we don't spam" required /><div class="error" id="emailError">That doesn't look right. Try again.</div></div>
+          <div class="field"><label for="whatsapp">WhatsApp Number</label><input id="whatsapp" type="tel" placeholder="+91 XXXXX XXXXX (for early access updates)" required /><div class="helper">We use this only for launch updates. No broadcast lists. No spam. Ever.</div><div class="error" id="waError">Include your country code. Minimum 10 digits.</div></div>
+          <button class="cta" type="submit" id="submitBtn" style="width:100%;">Request Commander Access →</button>
+          <p class="form-urgency">Invite-only. We are currently accepting the first 1,000 builders. Secure your rank.</p>
+        </form>
+        <div class="success-state" id="successState">
+          <div class="checkmark">✓</div>
+          <h3 class="success-headline">You're in. Your empire starts now.</h3>
+          <p class="success-subline">Check your email — your Pre-Flight Blueprint is on its way.<br />Your Founding Member spot is sealed.<br />We'll reach you on WhatsApp the moment the gates open.</p>
+          <div class="divider"></div>
+          <p class="italic">While you wait — here's what BuildEmpire's AI will ask you on day one:</p>
+          <p class="quote">"What does your life look like in 10 years — in exact, vivid detail? Minimum 20 words."</p>
+          <p class="small-muted">Start thinking. The clock is already running.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-left"><span class="logo-mark"></span>© 2025 BuildEmpire</div>
+        <div class="footer-center">Yeh empire sabka hai.</div>
+        <div></div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    let selectedFailureMode = "";
+    let formRevealed = false;
+
+    gsap.from(".logo", { opacity: 0, duration: 0.6, ease: "power2.out" });
+    gsap.from(".hero-headline", { opacity: 0, y: 30, duration: 0.8, delay: 0.2, ease: "power2.out" });
+    gsap.from(".hero-subline", { opacity: 0, y: 20, duration: 0.8, delay: 0.4, ease: "power2.out" });
+    gsap.from(".hero-cta", { opacity: 0, y: 20, duration: 0.8, delay: 0.6, ease: "power2.out" });
+    gsap.from(".hero-urgency", { opacity: 0, duration: 0.6, delay: 1.0 });
+    gsap.to(".hero-cta", { scale: 1.03, duration: 0.4, yoyo: true, repeat: 1, ease: "power1.inOut", delay: 1.4 });
+
+    document.getElementById('heroCta').addEventListener('click', () => {
+      const target = document.getElementById('waitlist-form-section');
+      if (formRevealed) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        document.querySelector('.diagnostic-grid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+
+    document.querySelectorAll('.diag-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.diag-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedFailureMode = card.dataset.mode;
+
+        if (!formRevealed) {
+          gsap.fromTo("#waitlist-form-section",
+            { opacity: 0, y: 24 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: "power2.out",
+              onStart: function () {
+                document.getElementById("waitlist-form-section").style.display = "block";
+              }
+            }
+          );
+          formRevealed = true;
+        }
+
+        setTimeout(() => {
+          document.getElementById('waitlist-form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 400);
+      });
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          gsap.fromTo(entry.target, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' });
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal-item').forEach((el, i) => {
+      el.style.opacity = 0;
+      el.style.transform = 'translateY(20px)';
+      el.style.transitionDelay = `${i * 0.15}s`;
+      io.observe(el);
+    });
+
+    const form = document.getElementById('waitlistForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function setError(id, show) {
+      document.getElementById(id + 'Error')?.classList.toggle('error-visible', show);
+      if (id === 'wa') return;
+      document.getElementById(id).classList.toggle('input-error', show);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.trim();
+
+      const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const digits = whatsapp.replace(/\s+/g, '').replace(/^\+/, '');
+      const whatsappValid = /^\d+$/.test(digits) && digits.length >= 10;
+
+      setError('name', !name);
+      setError('email', !emailValid);
+      document.getElementById('waError').classList.toggle('error-visible', !whatsappValid);
+      document.getElementById('whatsapp').classList.toggle('input-error', !whatsappValid);
+
+      if (!name || !emailValid || !whatsappValid) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Locking you in...';
+
+      const payload = {
+        name,
+        email,
+        whatsapp,
+        failure_mode: selectedFailureMode,
+        timestamp: new Date().toISOString(),
+        source: 'waitlist'
+      };
+
+      console.log('Waitlist payload:', payload);
+
+      try {
+        await fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (error) {
+        console.error('Waitlist API failed; continuing to success state.', error);
+      }
+
+      gsap.to('#waitlistForm', {
+        opacity: 0,
+        y: -12,
+        duration: 0.35,
+        onComplete: () => {
+          document.getElementById('waitlistForm').style.display = 'none';
+          const success = document.getElementById('successState');
+          success.style.display = 'block';
+          gsap.fromTo('.success-state', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' });
+          gsap.fromTo('.checkmark', { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
